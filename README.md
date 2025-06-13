@@ -3,6 +3,8 @@
 Do testów proszę pamiętać, żeby wybrać model/modele, które są mniejsze (GB) niż ilość pamięci VRAM GPU/RAM CPU.
 Im mniejszy model, tym więcej błędów będzie popełniał.
 
+### Program wymaga użycia systemu Linux (WSL lub pełny desktop)
+
 Wybrać można którykolwiek model spośród biblioteki ollama https://ollama.com/search . Testowane modele to:
 1. llama3.2 - popularny model stworzony przez firmę Meta (dawniej Facebook). Dostępny jest tu w dwóch wariantach:
 - llama3.2 (3b) 2.0GB
