@@ -93,7 +93,7 @@ Po uruchomieniu i pobraniu modeli, można przetestować API za pomocą `curl`:
 	bash
 	curl http://localhost:11434/api/generate -d '{
 		"model": "llama3.2",
-		"prompt": "Przywitaj się i przedstaw."
+		"prompt": "Przywitaj się i przedstaw.",
 		"stream": false
 	}'
 	
