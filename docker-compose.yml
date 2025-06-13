@@ -1,3 +1,4 @@
+# docker-compose.yml
 services:
   ollama-ai:
     build:
@@ -8,13 +9,6 @@ services:
       - ollama_data:/root/.ollama
     environment:
       - OLLAMA_MODELS=${OLLAMA_MODELS}
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
 
 volumes:
   ollama_data:
