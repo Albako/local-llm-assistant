@@ -1,12 +1,18 @@
 #!/bin/bash
 set -e
-
 /bin/ollama serve &
-
+pid=$!
 sleep 5
-echo "Pobieranie modelu qwen2.5vl..."
-ollama pull qwen2.5vl
+MODELS_TO_PULL=$(echo $OLLAMA_MODELS | sed 's/,/ /g')
+echo ">>> Rozpoczynam pobieranie modeli: $OLLAMA_MODELS"
 
-echo "Model pobrany. Serwer AI jest gotowy."
+for model in $MODELS_TO_PULL
+do
+	echo "--- Pobieranie modelu: $model ---"
+	ollama pull $model
+	echo "--- Pobieranie modelu $model zakończone ---"
+done
 
-wait $!
+echo ">>> Zakończono pobieranie zdefiniowanych modeli!"
+
+wait $pid
