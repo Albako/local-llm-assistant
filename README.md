@@ -57,37 +57,37 @@ Wybrać można którykolwiek model spośród biblioteki ollama https://ollama.co
 ### Konfiguracja modeli
 By program pobrał modele, należy stworzyć plik `.env` w głównej ścieżce ze zmienną `OLLAMA_MODELS`:
 
-	```
+	
 	OLLAMA_MODELS=<tu należy zdefiniować które modele zostaną ściągnięcie. Proszę o oddzielanie modeli przecinkami `,`>
-	```
+	
  Przykład poprawnie zdefiniowanej zmiennej:
  
- 	```
+ 	
   	OLLAMA_MODELS=llama3.2,gemma3:4b,dolphincoder:7b
-   	```
+   	
 
 
 Aby pobrać nowe modele, należy zrestartować serwis komendą:
 
-	```bash
+	bash
 	docker compose down
-	```
+	
 ## Uruchomienie
 Aby uruchomić serwis, należy w głównym folderze projektu wykonać komendę:
 
-	```bash
+	bash
 	./start.sh -d --build
-	```
+	
  
 
 ### Testowanie
 
 Po uruchomieniu i pobraniu modeli, można przetestować API za pomocą `curl`:
 
-	```bash
+	bash
 	curl http://localhost:11434/api/generate -d '{
 		"model": "llama3.2",
 		"prompt": "Przywitaj się i przedstaw."
 		"stream": false
 	}'
-	```
+	
