@@ -79,7 +79,7 @@ Aby uruchomić serwis, należy w głównym folderze projektu wykonać komendę:
 	./start.sh -d --build
 
 
- Sprawdzenie czy `ollama` skończyła pobierać:
+ Sprawdzenie czy `ollama` skończyła przygotowywać model/modele:
 
  	bash
   	docker compose logs -f ollama-ai
