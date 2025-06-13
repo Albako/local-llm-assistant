@@ -96,4 +96,4 @@ Po uruchomieniu i pobraniu modeli, można przetestować API za pomocą `curl`:
 		"prompt": "Przywitaj się i przedstaw.",
 		"stream": false
 	}'
-	
+287e827 (docs: Aktualizacja README i badanie API)
