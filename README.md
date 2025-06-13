@@ -15,7 +15,7 @@ Program jest w stanie sam wykryć GPU NVIDIA/AMD/INTEL. W przypadku braku posiad
  - Wymuszenie trybu CPU:
 	
    	```bash
-    	./start.sh --cpu -d
+    ./start.sh --cpu -d
     	
  - Wymuszenie trybu NVIDIA:
 
