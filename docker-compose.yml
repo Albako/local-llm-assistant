@@ -6,9 +6,32 @@ services:
     container_name: chat-backend
     ports:
       - "8000:8000"
+    networks:
+      - chatnet
 
   frontend:
     build: ./frontend
     container_name: chat-frontend
     ports:
       - "3000:3000"
+    networks:
+      - chatnet
+    depends_on:
+      - backend
+
+  ollama:
+    image: ollama/ollama
+    container_name: chat-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    networks:
+      - chatnet
+
+volumes:
+  ollama-data:
+
+networks:
+  chatnet:
+    driver: bridge
