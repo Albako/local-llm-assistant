@@ -7,32 +7,61 @@ Im większy model, tym wolniej będzie działał.
 ### Program wymaga uruchomienia w systemie Linux, lub w systemie Windows przez WSL
 
 Program jest w stanie sam wykryć GPU NVIDIA/AMD/INTEL. W przypadku braku posiadania GPU NVIDIA/AMD/INTEL program sam się uruchomi w trybie CPU.
+1. Linux:
  - Automatyczne wykrywanie:
 
 	```bash
- 	./start.sh -d --build
+ 	./start.sh --build -d
   	```
  - Wymuszenie trybu CPU:
 	
    	```bash
-    ./start.sh --cpu -d
-    
+    ./start.sh --cpu --build -d
+	```
+
  - Wymuszenie trybu NVIDIA:
 
 	```bash
- 	./start.sh --nvidia -d
+ 	./start.sh --nvidia --build -d
  	```
  - Wymuszenie trybu AMD:
 
 	```bash
- 	./start.sh --amd -d
+ 	./start.sh --amd --build -d
  	```
 
  - Wymuszenie trybu INTEL:
 
 	```bash
- 	./start.sh --intel -d
+ 	./start.sh --intel --build -d
  	```
+2. Windows:
+ - Automatyczne wykrywanie:
+   Należy uruchomić plik `start.bat`. Program automatycznie spawdzi, czy na komputerze jest zainstalowany i skonfigurowany WSL2. Jeśli nie, to wyświetli instrukcję, jak to zrobić. Następnie sprawdzi, czy jest zainstalowany `Docker Desktop`. Na samym końcu gdy będą te dwa kroki już zrobione, to program uruchomi wewnątrz WSL2 skrypt `start.sh`.
+ 
+ - Wymuszenie trybu CPU:
+
+	```DOS
+	.\start.bat --cpu --build -d
+	```
+
+ - Wymuszenie trybu NVIDIA:
+
+	```DOS
+	.\start.bat --nvidia --build -d
+	```
+
+ - Wymuszenie trybu AMD:
+
+	```DOS
+	.\start.bat --amd --build -d
+	```
+
+ - Wymuszenie trybu INTEL:
+
+	```DOS
+	.\start.bat --intel --build -d
+	```
 
 ### Wybór modelu/modeli
 Wybrać można którykolwiek model spośród biblioteki ollama https://ollama.com/search . Testowane modele to:
