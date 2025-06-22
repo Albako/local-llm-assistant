@@ -1,0 +1,10 @@
+# docker-compose.nvidia.yml
+services:
+  ollama-ai:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

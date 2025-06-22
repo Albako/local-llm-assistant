@@ -1,0 +1,14 @@
+# docker-compose.yml
+services:
+  ollama-ai:
+    build:
+      context: ./ollama_backend
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_MODELS=${OLLAMA_MODELS}
+
+volumes:
+  ollama_data:
