@@ -98,19 +98,19 @@ By program pobrał modele, należy stworzyć plik `.env` w głównej ścieżce z
 
 Aby pobrać nowe modele, należy zrestartować serwis komendą:
 
-	bash
+	
 	docker compose down
 	
 ## Uruchomienie
 Aby uruchomić serwis, należy w głównym folderze projektu wykonać komendę:
 
-	bash
+	
 	./start.sh -d --build
 
 
  Sprawdzenie czy `ollama` skończyła przygotowywać model/modele:
 
- 	bash
+ 	
   	docker compose logs -f ollama-ai
 	
  
@@ -119,10 +119,9 @@ Aby uruchomić serwis, należy w głównym folderze projektu wykonać komendę:
 
 Po uruchomieniu i pobraniu modeli, można przetestować API za pomocą `curl`:
 
-	bash
+	
 	curl http://localhost:11434/api/generate -d '{
-		"model": "llama3.2",
-		"prompt": "Przywitaj się i przedstaw.",
+		"model": "asystent-projektu",
+		"prompt": "Opowiedz mi o zastosowaniach Dockera.",
 		"stream": false
 	}'
-287e827 (docs: Aktualizacja README i badanie API)
