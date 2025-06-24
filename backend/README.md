@@ -84,7 +84,7 @@ Wybrać można którykolwiek model spośród biblioteki ollama https://ollama.co
 
 
 ### Konfiguracja modeli
-By program pobrał modele, należy stworzyć plik `.env` w głównej ścieżce ze zmienną `OLLAMA_MODELS`:
+By program pobrał modele, należy stworzyć plik `.env` w głównej ścieżce ze zmienną `OLLAMA_MODELS`. Jeśli plik nie zostanie stworzony ręcznie, program sam stworzy wymagany plik na podstawie .env.example::
 
 	
 	OLLAMA_MODELS=<tu należy zdefiniować które modele zostaną ściągnięcie. Proszę o oddzielanie modeli przecinkami `,`>
