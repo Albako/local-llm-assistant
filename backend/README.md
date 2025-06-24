@@ -108,10 +108,9 @@ Aby uruchomić serwis, należy w głównym folderze projektu wykonać komendę:
 	./start.sh -d --build
 
 
- Sprawdzenie czy `ollama` skończyła przygotowywać model/modele:
+Sprawdzenie czy `ollama` skończyła przygotowywać model/modele:
 
- 	
-  	docker compose logs -f ollama-ai
+	docker compose logs -f ollama-ai
 	
  
 
@@ -139,13 +138,13 @@ By test poprawnie działał, należy mieć zainstalowane narzędzie jq.
 
 Instalacja jq:
 1. Ubuntu/Debian
-		
-			sudo apt install jq
+
+		sudo apt install jq
 
 2. Fedora
 
-			sudo dnf install jq
+		sudo dnf install jq
 
 3. Arch
 
-			sudo pacman -S jq
+		sudo pacman -S jq
