@@ -122,6 +122,6 @@ Po uruchomieniu i pobraniu modeli, można przetestować API za pomocą `curl`:
 	
 	curl http://localhost:11434/api/generate -d '{
 		"model": "asystent-projektu",
-		"prompt": "Opowiedz mi o zastosowaniach Dockera.",
+		"prompt": "Czym jest konteneryzacja w kontekscie Dockera?",
 		"stream": false
 	}'
