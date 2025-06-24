@@ -117,11 +117,35 @@ Aby uruchomić serwis, należy w głównym folderze projektu wykonać komendę:
 
 ### Testowanie
 
-Po uruchomieniu i pobraniu modeli, można przetestować API za pomocą `curl`:
+1. Sprawdzenie listy pobranych modeli:
+
+		docker compose exec ollama-ai ollama list
+
+2. Po uruchomieniu i pobraniu modeli, można przetestować API za pomocą `curl`:
 
 	
-	curl http://localhost:11434/api/generate -d '{
+		curl http://localhost:11434/api/generate -d '{
 		"model": "asystent-projektu",
 		"prompt": "Czym jest konteneryzacja w kontekscie Dockera?",
 		"stream": false
-	}'
+		}'
+
+3. Skrypt testujący wydajność zapamiętywania kontekstu:
+
+		./test_wydajnosci.sh
+
+Jeśli z biegiem testu czas trwania (ms) rosną, to oznacza, że podel poprawnie "zapamiętuje" historie rozmowy.
+By test poprawnie działał, należy mieć zainstalowane narzędzie jq.
+
+Instalacja jq:
+1. Ubuntu/Debian
+		
+			sudo apt install jq
+
+2. Fedora
+
+			sudo dnf install jq
+
+3. Arch
+
+			sudo pacman -S jq
