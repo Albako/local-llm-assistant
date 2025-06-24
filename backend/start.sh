@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# Sprawdzenie czy istnieje plik .env
+if [ ! -f .env]; then
+    echo "Plik .env nie istnieje. Tworzenie pliku na podstawie szablonu .env.example..."
+    if [ -f .env.example ]; then
+        cp .env.example .env
+        echo "Plik .env zostal utworzony."
+    else
+        echo "UWAGA: Nie odnaleziono pliku .env.example! Uzyte zostana domyslne wartosci."
+    fi
+fi
+
 # Domyślna konfiguracja to plik bazowy (CPU)
 COMPOSE_FILES="-f docker-compose.yml"
 MODE="CPU"

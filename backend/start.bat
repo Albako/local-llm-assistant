@@ -1,4 +1,15 @@
 @echo off
+REM --- Sprawdzanie czy istnieje plik .env ---
+if not exist .env (
+    echo Plik .env nie istnieje. Tworzenie pliku na podstawie .env.example...
+    if exist .env.example (
+        copy .env.example .env > nul
+        echo Plik .env zostal utworzony.
+    ) else (
+        echo UWAGA: Nie odnaleziono pliku .env.example!
+    )
+)
+REM ------------------------------------------
 ECHO.
 ECHO Sprawdzanie srodowiska Windows dla projektu lokalnego asystenta AI...
 ECHO ===================================================================
