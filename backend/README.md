@@ -66,7 +66,7 @@ Program jest w stanie sam wykryć GPU NVIDIA/AMD/INTEL. W przypadku braku posiad
 ### Wybór modelu/modeli
 Wybrać można którykolwiek model spośród biblioteki ollama https://ollama.com/search . Testowane modele to:
 1. llama3.2 - popularny model stworzony przez firmę Meta (dawniej Facebook). Testowany był w dwóch wariantach:
-  - llama3.2 (3b) 2.0GB
+  - llama3.2 (3b) 2.0GB - Na podstawie tego modelu został stworzony asystent-projektu, który ma za zadanie specjalizować się w tematyce związanej z tym projektem.
   - llama3.2:1b 1.3GB
 2. gemma3 - popularny model stworzony przez firmę Google na podwalinach flagowego modelu Gemini. Testowany był w jednym wariancie:
   - gemma3:4b 3.3GB
