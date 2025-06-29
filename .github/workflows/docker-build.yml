@@ -23,7 +23,9 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build Docker image
+ HEAD
       run: docker build -t ${{ secrets.DOCKER_USERNAME }}/projekt-backend:latest backend/ollama_backend/
 
     - name: Push Docker image
       run: docker push ${{ secrets.DOCKER_USERNAME }}/projekt-backend:latest
+ bb41a30cbbc2dbc8b12e3c95c3060412d39fd991
