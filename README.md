@@ -1,2 +1,9 @@
-Lokalny asystent AI — konfiguracja Dockera
-Projekt polega na stworzeniu lokalnego czatu AI (ChatGPT-like) opartego na otwartoźródłowych modelach LLM (Ollama), z webowym frontendem (OpenWebUI fork) i backendem (FastAPI lub Node.js). Moim zadaniem było przygotowanie środowiska kontenerowego.
+# Projekt
+
+Stworzenie profesjonalnego,
+stabilnego, łatwego w utrzymaniu i skalowalnego lokalnego czatu GPT, który
+może stanowić bazę do dalszych rozszerzeń (w przyszłości np. wdrożenie
+chmury, integracja z systemami zewnętrznymi).
+
+Korzystający z otwartoźródłowych modeli LLM udostępnianych przez Ollama oraz graficznego interfejsu webowego opartego na
+OpenWebUI.
