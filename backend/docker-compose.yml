@@ -7,7 +7,7 @@ services:
       - "11434:11434"
     volumes:
       - ollama_data:/root/.ollama
-      - ./ollama_backend:/ollama_backend
+      - ./ollama_backend:/ollama_backend:z
     environment:
       - OLLAMA_MODELS=${OLLAMA_MODELS}
     healthcheck:
