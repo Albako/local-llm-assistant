@@ -35,7 +35,7 @@ Program jest w stanie sam wykryć GPU NVIDIA/AMD/INTEL. W przypadku braku posiad
 	```bash
  	./start.sh --intel --build -d
  	```
-2. Windows:
+2. Windows (eksperymentalne - obecnie należy korzystać bezpośrednio z poprawnie skonfigurowanego WSL2 z wybraną dystrybucją):
  - Automatyczne wykrywanie:
    Należy uruchomić plik `start.bat`. Program automatycznie spawdzi, czy na komputerze jest zainstalowany i skonfigurowany WSL2. Jeśli nie, to wyświetli instrukcję, jak to zrobić. Następnie sprawdzi, czy jest zainstalowany `Docker Desktop`. Na samym końcu gdy będą te dwa kroki już zrobione, to program uruchomi wewnątrz WSL2 skrypt `start.sh`.
  
@@ -78,8 +78,8 @@ Wybrać można którykolwiek model spośród biblioteki ollama https://ollama.co
   - deepseek-r1:70b 43GB
 
 ### Wymagania
-- Docker i Docker Compose
-- Poprawnie skonfigurowany NVIDIA Container Toolkit (w przypadku GPU NVIDIA)
+- Docker i Docker Compose (na Windows trzeba skonfigurować Settings -> Resources -> WSL integration. W zakładce WSL należy się upewnić, że checkbox `Enable integration with my default WSL distro` jest zaznaczony, a także jest włączona dystrybucja linuxa poniżej (np. `ubuntu`)
+- Poprawnie skonfigurowany NVIDIA Container Toolkit (w przypadku GPU NVIDIA) - bez tego, program będzie się uruchamiał jedynie w trybie `CPU` lub w przypadku innych kart `GPU` w innym trybie.
 - Sterowniki `CUDA NVIDIA`/`AMDGPU ROCm AMD`
 
 
@@ -101,7 +101,7 @@ Aby pobrać nowe modele, należy zrestartować serwis komendą:
 	
 	docker compose down
 	
-## Uruchomienie
+### Uruchomienie
 Aby uruchomić serwis, należy w głównym folderze projektu wykonać komendę:
 
 	
@@ -111,7 +111,11 @@ Aby uruchomić serwis, należy w głównym folderze projektu wykonać komendę:
 Sprawdzenie czy `ollama` skończyła przygotowywać model/modele:
 
 	docker compose logs -f ollama-ai
+
+## Troubleshooting
+W przypadku gdy linux nie będzie chciał uruchomić naszego programu, należy zweryfikować na czym polega błąd. Najczęstrzymi problemami jest błędnie skonfigurowany docker w przypadku WSL, brak uprawnień dla plików .sh
 	
+	chmod +x *.sh	
  
 
 ### Testowanie
