@@ -35,7 +35,7 @@ Program jest w stanie sam wykryć GPU NVIDIA/AMD/INTEL. W przypadku braku posiad
 	```bash
  	./start.sh --intel --build -d
  	```
-2. Windows (eksperymentalne - obecnie należy korzystać bezpośrednio z poprawnie skonfigurowanego WSL2 z wybraną dystrybucją):
+2. Windows:
  - Automatyczne wykrywanie:
    Należy uruchomić plik `start.bat`. Program automatycznie spawdzi, czy na komputerze jest zainstalowany i skonfigurowany WSL2. Jeśli nie, to wyświetli instrukcję, jak to zrobić. Następnie sprawdzi, czy jest zainstalowany `Docker Desktop`. Na samym końcu gdy będą te dwa kroki już zrobione, to program uruchomi wewnątrz WSL2 skrypt `start.sh`.
  
@@ -62,6 +62,10 @@ Program jest w stanie sam wykryć GPU NVIDIA/AMD/INTEL. W przypadku braku posiad
 	```DOS
 	.\start.bat --intel --build -d
 	```
+
+Pozostałą część systemu należy obsługiwać w oknie terminala z włączoną dystrybucją WSL2. 
+# Disclaimer
+Żeby wszystko poprawnie działało, należy poprawnie skonfigurować dystrybucję Linux w WSL2.
 
 ### Wybór modelu/modeli
 Wybrać można którykolwiek model spośród biblioteki ollama https://ollama.com/search . Testowane modele to:
