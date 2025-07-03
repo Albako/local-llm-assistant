@@ -64,10 +64,10 @@ Program jest w stanie sam wykryć GPU NVIDIA/AMD/INTEL. W przypadku braku posiad
 	```
 
 Pozostałą część systemu należy obsługiwać w oknie terminala z włączoną dystrybucją WSL2. 
-# Disclaimer
+### Disclaimer
 Żeby wszystko poprawnie działało, należy poprawnie skonfigurować dystrybucję Linux w WSL2.
 
-### Wybór modelu/modeli
+## Wybór modelu/modeli
 Wybrać można którykolwiek model spośród biblioteki ollama https://ollama.com/search . Testowane modele to:
 1. llama3.2 - popularny model stworzony przez firmę Meta (dawniej Facebook). Testowany był w dwóch wariantach:
   - llama3.2 (3b) 2.0GB - Na podstawie tego modelu został stworzony asystent-projektu, który ma za zadanie specjalizować się w tematyce związanej z tym projektem.
@@ -81,13 +81,13 @@ Wybrać można którykolwiek model spośród biblioteki ollama https://ollama.co
   - deepseek-r1:14b 9.0GB
   - deepseek-r1:70b 43GB
 
-### Wymagania
+## Wymagania
 - Docker i Docker Compose (na Windows trzeba skonfigurować Settings -> Resources -> WSL integration. W zakładce WSL należy się upewnić, że checkbox `Enable integration with my default WSL distro` jest zaznaczony, a także jest włączona dystrybucja linuxa poniżej (np. `ubuntu`)
 - Poprawnie skonfigurowany NVIDIA Container Toolkit (w przypadku GPU NVIDIA) - bez tego, program będzie się uruchamiał jedynie w trybie `CPU` lub w przypadku innych kart `GPU` w innym trybie.
 - Sterowniki `CUDA NVIDIA`/`AMDGPU ROCm AMD`
 
 
-### Konfiguracja modeli
+## Konfiguracja modeli
 By program pobrał modele, należy stworzyć plik `.env` w głównej ścieżce ze zmienną `OLLAMA_MODELS`. Jeśli plik nie zostanie stworzony ręcznie, program sam stworzy wymagany plik na podstawie .env.example:
 
 	
