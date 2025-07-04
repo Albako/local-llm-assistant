@@ -1,75 +1,96 @@
 #!/bin/bash
 
-# Sprawdzenie czy istnieje plik .env
-if [ ! -f .env]; then
-    echo "Plik .env nie istnieje. Tworzenie pliku na podstawie szablonu .env.example..."
-    if [ -f .env.example ]; then
-        cp .env.example .env
-        echo "Plik .env zostal utworzony."
+# Always resolve PROJECT_ROOT as the parent of the backend directory
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+cd "$SCRIPT_DIR" || exit 1
+
+# Ensure .env exists in the project root
+if [ ! -f "$PROJECT_ROOT/.env" ]; then
+    echo "Plik .env nie istnieje w katalogu głównym. Tworzenie pliku na podstawie szablonu .env.example..."
+    if [ -f "$PROJECT_ROOT/.env.example" ]; then
+        cp "$PROJECT_ROOT/.env.example" "$PROJECT_ROOT/.env"
+        echo "Plik .env zostal utworzony w katalogu głównym."
     else
-        echo "UWAGA: Nie odnaleziono pliku .env.example! Uzyte zostana domyslne wartosci."
+        echo "UWAGA: Nie odnaleziono pliku .env.example w katalogu głównym! Uzyte zostana domyslne wartosci."
     fi
 fi
 
-# Domyślna konfiguracja to plik bazowy (CPU)
-COMPOSE_FILES="-f docker-compose.yml"
+# Export all variables from .env so they are available to docker compose
+if [ -f "$PROJECT_ROOT/.env" ]; then
+    set -a
+    source "$PROJECT_ROOT/.env"
+    set +a
+fi
+
+COMPOSE_FILES="-f $PROJECT_ROOT/docker-compose.yml"
 MODE="CPU"
-
-# --- Zunifikowana logika wyboru trybu ---
-
-# Sprawdź, czy użytkownik podał flagę wyboru
 if [[ "$1" == "--nvidia" ]]; then
     echo "Wymuszono tryb NVIDIA."
-    COMPOSE_FILES="-f docker-compose.yml -f docker-compose.nvidia.yml"
+    COMPOSE_FILES="-f $PROJECT_ROOT/docker-compose.yml -f $PROJECT_ROOT/docker-compose.nvidia.yml"
     MODE="NVIDIA"
 elif [[ "$1" == "--amd" ]]; then
     echo "Wymuszono tryb AMD."
-    COMPOSE_FILES="-f docker-compose.yml -f docker-compose.amd.yml"
+    COMPOSE_FILES="-f $PROJECT_ROOT/docker-compose.yml -f $PROJECT_ROOT/docker-compose.amd.yml"
     MODE="AMD"
 elif [[ "$1" == "--intel" ]]; then
     echo "Wymuszono tryb INTEL."
-    COMPOSE_FILES="-f docker-compose.yml -f docker-compose.intel.yml"
+    COMPOSE_FILES="-f $PROJECT_ROOT/docker-compose.yml -f $PROJECT_ROOT/docker-compose.intel.yml"
     MODE="INTEL"
 elif [[ "$1" == "--cpu" ]]; then
     echo "Wymuszono tryb CPU."
-    # Nic nie trzeba dodawać, plik bazowy jest już wybrany
 else
-    # Jeśli nie podano flagi, uruchom auto-detekcję
     echo "Trwa automatyczne wykrywanie GPU"
     if command -v nvidia-smi &> /dev/null; then
         echo "Wykryto GPU NVIDIA. Używam konfiguracji NVIDIA."
-        COMPOSE_FILES="$COMPOSE_FILES -f docker-compose.nvidia.yml"
+        COMPOSE_FILES="$COMPOSE_FILES -f $PROJECT_ROOT/docker-compose.nvidia.yml"
         MODE="NVIDIA"
     elif [ -e /dev/kfd ]; then
         echo "Wykryto GPU AMD. Używam konfiguracji AMD."
-        COMPOSE_FILES="$COMPOSE_FILES -f docker-compose.amd.yml"
+        COMPOSE_FILES="$COMPOSE_FILES -f $PROJECT_ROOT/docker-compose.amd.yml"
         MODE="AMD"
-    elif lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq "intel"; then
+    elif command -v lspci &> /dev/null && lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq "intel"; then
         echo "Wykryto GPU INTEL. Używam konfiguracji INTEL."
-        COMPOSE_FILES="$COMPOSE_FILES -f docker-compose.intel.yml"
+        COMPOSE_FILES="$COMPOSE_FILES -f $PROJECT_ROOT/docker-compose.intel.yml"
         MODE="INTEL"
     else
         echo "Nie wykryto kompatybilnego GPU. Używam konfiguracji CPU."
     fi
 fi
 
-# --- Uruchomienie docker-compose z wybraną konfiguracją ---
 echo "____________________________________________________"
 echo "Uruchamianie serwisu w trybie: $MODE"
 echo "____________________________________________________"
 
-# Przekaż argumenty (np. -d, --build) do docker-compose
-# Jeśli podano flagę trybu, pomiń ją ($@:2), w przeciwnym razie przekaż wszystko ($@)
+# Always use the project root .env file for docker compose
 if [[ "$1" == --* ]]; then
-    docker compose $COMPOSE_FILES up -d "${@:2}"
+    docker compose --env-file "$PROJECT_ROOT/.env" $COMPOSE_FILES up -d "${@:2}"
 else
-    docker compose $COMPOSE_FILES up -d "$@"
+    docker compose --env-file "$PROJECT_ROOT/.env" $COMPOSE_FILES up -d "$@"
 fi
 
-#!/usr/bin/env bash
+# Check if we should run in Docker mode or local development mode
+# If no --local flag is provided, we assume Docker mode and exit after starting containers
+if [[ "$*" != *"--local"* ]]; then
+    echo "Containers started successfully. Access the application at:"
+    echo "  http://localhost:${OPEN_WEBUI_PORT:-3000}"
+    echo ""
+    echo "To view logs, run:"
+    echo "  docker compose --env-file \"$PROJECT_ROOT/.env\" $COMPOSE_FILES logs -f"
+    echo ""
+    echo "To stop the containers, run:"
+    echo "  docker compose --env-file \"$PROJECT_ROOT/.env\" $COMPOSE_FILES down"
+    exit 0
+fi
 
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+# If we reach here, we're running the WebUI directly (not in Docker)
+# Change to script directory for direct execution
 cd "$SCRIPT_DIR" || exit
+
+echo "Running in LOCAL DEVELOPMENT MODE"
+echo "This requires Python dependencies to be installed locally."
+echo "Make sure you have run: pip install -r requirements.txt"
+echo ""
 
 # Add conditional Playwright browser installation
 if [[ "${WEB_LOADER_ENGINE,,}" == "playwright" ]]; then
@@ -115,27 +136,27 @@ fi
 
 # Check if SPACE_ID is set, if so, configure for space
 if [ -n "$SPACE_ID" ]; then
-  echo "Configuring for HuggingFace Space deployment"
+    echo "Configuring for HuggingFace Space deployment"
 
- if [ -n "$ADMIN_USER_EMAIL" ] && [ -n "$ADMIN_USER_PASSWORD" ]; then
-    echo "Admin user configured, creating"
-    WEBUI_SECRET_KEY="$WEBUI_SECRET_KEY" uvicorn open_webui.main:app --host "$HOST" --port "$PORT" --forwarded-allow-ips '*' &
-    webui_pid=$!
-    echo "Waiting for webui to start..."
-    while ! curl -s http://localhost:8080/health > /dev/null; do
-      sleep 1
-    done
-    echo "Creating admin user..."
-    curl \
-      -X POST "http://localhost:8080/api/v1/auths/signup" \
-      -H "accept: application/json" \
-      -H "Content-Type: application/json" \
-      -d "{ \"email\": \"${ADMIN_USER_EMAIL}\", \"password\": \"${ADMIN_USER_PASSWORD}\", \"name\": \"Admin\" }"
-    echo "Shutting down webui..."
-    kill $webui_pid
-  fi
+    if [ -n "$ADMIN_USER_EMAIL" ] && [ -n "$ADMIN_USER_PASSWORD" ]; then
+        echo "Admin user configured, creating"
+        WEBUI_SECRET_KEY="$WEBUI_SECRET_KEY" uvicorn open_webui.main:app --host "$HOST" --port "$PORT" --forwarded-allow-ips '*' &
+        webui_pid=$!
+        echo "Waiting for webui to start..."
+        while ! curl -s http://localhost:8080/health > /dev/null; do
+            sleep 1
+        done
+        echo "Creating admin user..."
+        curl \
+            -X POST "http://localhost:8080/api/v1/auths/signup" \
+            -H "accept: application/json" \
+            -H "Content-Type: application/json" \
+            -d "{ \"email\": \"${ADMIN_USER_EMAIL}\", \"password\": \"${ADMIN_USER_PASSWORD}\", \"name\": \"Admin\" }"
+        echo "Shutting down webui..."
+        kill $webui_pid
+    fi
 
-  export WEBUI_URL=${SPACE_HOST}
+    export WEBUI_URL=${SPACE_HOST}
 fi
 
 PYTHON_CMD=$(command -v python3 || command -v python)

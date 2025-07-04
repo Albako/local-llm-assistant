@@ -114,19 +114,39 @@ Aby uruchomić serwis, należy w głównym folderze projektu wykonać komendę:
 
 Sprawdzenie czy `ollama` skończyła przygotowywać model/modele:
 
-	docker compose logs -f ollama-ai
+	docker compose logs -f ollama
 
 ## Troubleshooting
-W przypadku gdy linux nie będzie chciał uruchomić naszego programu, należy zweryfikować na czym polega błąd. Najczęstrzymi problemami jest błędnie skonfigurowany docker w przypadku WSL, brak uprawnień dla plików .sh
-	
-	chmod +x *.sh	
+W przypadku gdy linux nie będzie chciał uruchomić naszego programu, należy zweryfikować na czym polega błąd. Najczęstszymi problemami są:
+
+1. **Błędnie skonfigurowany Docker w przypadku WSL**
+2. **Brak uprawnień dla plików .sh**
+   
+   Rozwiązanie:
+   ```bash
+   chmod +x *.sh
+   ```
+   
+   Lub użyj skryptu naprawczego:
+   ```bash
+   ./fix-permissions.sh
+   ```
+
+3. **Problemy z plikiem .env**
+   - Upewnij się, że plik .env istnieje w katalogu głównym
+   - Sprawdź, czy nie zawiera błędnych znaków lub pustych linii
+   - Użyj pliku .env.example jako szablonu
+
+4. **Problemy z portami**
+   - Sprawdź, czy porty 8080 i 11434 nie są zajęte
+   - Zmień porty w pliku .env jeśli potrzeba	
  
 
 ### Testowanie
 
 1. Sprawdzenie listy pobranych modeli:
 
-		docker compose exec ollama-ai ollama list
+		docker compose exec ollama ollama list
 
 2. Po uruchomieniu i pobraniu modeli, można przetestować API za pomocą `curl`:
 

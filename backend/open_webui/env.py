@@ -26,9 +26,11 @@ print(BACKEND_DIR)
 print(BASE_DIR)
 
 try:
-    from dotenv import find_dotenv, load_dotenv
+    from dotenv import load_dotenv
 
-    load_dotenv(find_dotenv(str(BASE_DIR / ".env")))
+    # Always load .env from the project root (where docker-compose.yml is)
+    PROJECT_ROOT = BASE_DIR  # BASE_DIR points to project root
+    load_dotenv(dotenv_path=str(PROJECT_ROOT / ".env"))
 except ImportError:
     print("dotenv not installed, skipping...")
 
