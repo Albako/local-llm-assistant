@@ -1,19 +1,29 @@
+# docker-compose.yml
 services:
   ollama:
+    build:
+      context: ./backend/ollama_backend
+      dockerfile: Dockerfile
+    ports:
+      - "11434:11434"
     volumes:
-      - ollama:/root/.ollama
-    container_name: ollama
-    pull_policy: always
-    tty: true
-    restart: unless-stopped
-    image: ollama/ollama:${OLLAMA_DOCKER_TAG-latest}
+      - ollama_data:/root/.ollama
+      - ./backend/ollama_backend:/ollama_backend:z
+    environment:
+      - OLLAMA_MODELS=${OLLAMA_MODELS}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434"]
+      interval: 30s
+      timeout: 15s
+      retries: 3
+      start_period: 60s
 
   open-webui:
     build:
       context: .
+      dockerfile: Dockerfile
       args:
         OLLAMA_BASE_URL: '/ollama'
-      dockerfile: Dockerfile
     image: ghcr.io/open-webui/open-webui:${WEBUI_DOCKER_TAG-main}
     container_name: open-webui
     volumes:
@@ -30,5 +40,5 @@ services:
     restart: unless-stopped
 
 volumes:
-  ollama: {}
+  ollama_data: {}
   open-webui: {}
