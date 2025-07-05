@@ -20,7 +20,7 @@ Przed uruchomieniem upewnij się, że masz zainstalowane:
 ## Instalacja i Konfiguracja
 1.  **Sklonuj repozytorium:**
     ```bash
-    git clone [https://github.com/Projektautomatyzacja/Projekt.git](https://github.com/Projektautomatyzacja/Projekt.git)
+    git clone https://github.com/Projektautomatyzacja/Projekt.git
     cd Projekt
     ```
 
@@ -31,7 +31,7 @@ Przed uruchomieniem upewnij się, że masz zainstalowane:
     ```
     OLLAMA_MODELS=llama3.2:3b,gemma:4b,deepseer-r1:7b,dolphincoder:7b
     ```
-    Listę dostępnych modeli znajdziesz na [ollama.com/library](https://ollama.com/library).
+    Listę dostępnych modeli znajdziesz na `https://ollama.com/library`.
 
 3.  **Nadaj uprawnienia skryptom (Tylko Linux)**
     Po sklonowaniu repozytorium, nadaj uprawnienia do uruchamiania wszystkim skryptom za pomocą naszej przygotowanej komendy:
