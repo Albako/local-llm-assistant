@@ -24,7 +24,7 @@ services:
       dockerfile: Dockerfile
       args:
         OLLAMA_BASE_URL: '/ollama'
-    image: ghcr.io/open-webui/open-webui:${WEBUI_DOCKER_TAG-main}
+#    image: ghcr.io/open-webui/open-webui:${WEBUI_DOCKER_TAG-main}
     container_name: open-webui
     volumes:
       - open-webui:/app/backend/data
