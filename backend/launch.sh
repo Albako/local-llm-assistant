@@ -25,6 +25,7 @@ fi
 
 COMPOSE_FILES="-f $PROJECT_ROOT/docker-compose.yml"
 MODE="CPU"
+
 if [[ "$1" == "--nvidia" ]]; then
     echo "Wymuszono tryb NVIDIA."
     COMPOSE_FILES="-f $PROJECT_ROOT/docker-compose.yml -f $PROJECT_ROOT/docker-compose.nvidia.yml"
@@ -39,6 +40,10 @@ elif [[ "$1" == "--intel" ]]; then
     MODE="INTEL"
 elif [[ "$1" == "--cpu" ]]; then
     echo "Wymuszono tryb CPU."
+elif [[ "$1" == "--local" ]]; then
+    echo "Uruchamianie w trybie lokalnym (bez Docker)..."
+    # Jump directly to local development mode
+    MODE="LOCAL"
 else
     echo "Trwa automatyczne wykrywanie GPU"
     if command -v nvidia-smi &> /dev/null; then
@@ -58,20 +63,19 @@ else
     fi
 fi
 
-echo "____________________________________________________"
-echo "Uruchamianie serwisu w trybie: $MODE"
-echo "____________________________________________________"
+# Handle Docker mode
+if [[ "$MODE" != "LOCAL" ]]; then
+    echo "____________________________________________________"
+    echo "Uruchamianie serwisu w trybie: $MODE"
+    echo "____________________________________________________"
 
-# Always use the project root .env file for docker compose
-if [[ "$1" == --* ]]; then
-    docker compose --env-file "$PROJECT_ROOT/.env" $COMPOSE_FILES up -d "${@:2}"
-else
-    docker compose --env-file "$PROJECT_ROOT/.env" $COMPOSE_FILES up -d "$@"
-fi
+    # Always use the project root .env file for docker compose
+    if [[ "$1" == --* && "$1" != "--local" ]]; then
+        docker compose --env-file "$PROJECT_ROOT/.env" $COMPOSE_FILES up -d "${@:2}"
+    else
+        docker compose --env-file "$PROJECT_ROOT/.env" $COMPOSE_FILES up -d "$@"
+    fi
 
-# Check if we should run in Docker mode or local development mode
-# If no --local flag is provided, we assume Docker mode and exit after starting containers
-if [[ "$*" != *"--local"* ]]; then
     echo "Containers started successfully. Access the application at:"
     echo "  http://localhost:${OPEN_WEBUI_PORT:-3000}"
     echo ""
@@ -83,9 +87,10 @@ if [[ "$*" != *"--local"* ]]; then
     exit 0
 fi
 
-# If we reach here, we're running the WebUI directly (not in Docker)
-# Change to script directory for direct execution
-cd "$SCRIPT_DIR" || exit
+# LOCAL DEVELOPMENT MODE (--local flag was provided)
+echo "____________________________________________________"
+echo "Uruchamianie serwisu w trybie: LOCAL DEVELOPMENT"
+echo "____________________________________________________"
 
 echo "Running in LOCAL DEVELOPMENT MODE"
 echo "This requires Python dependencies to be installed locally."
@@ -103,6 +108,7 @@ if [[ "${WEB_LOADER_ENGINE,,}" == "playwright" ]]; then
     python -c "import nltk; nltk.download('punkt_tab')"
 fi
 
+# Handle secret key for local development
 if [ -n "${WEBUI_SECRET_KEY_FILE}" ]; then
     KEY_FILE="${WEBUI_SECRET_KEY_FILE}"
 else
@@ -112,16 +118,16 @@ fi
 PORT="${PORT:-8080}"
 HOST="${HOST:-0.0.0.0}"
 if test "$WEBUI_SECRET_KEY $WEBUI_JWT_SECRET_KEY" = " "; then
-  echo "Loading WEBUI_SECRET_KEY from file, not provided as an environment variable."
+    echo "Loading WEBUI_SECRET_KEY from file, not provided as an environment variable."
 
-  if ! [ -e "$KEY_FILE" ]; then
-    echo "Generating WEBUI_SECRET_KEY"
-    # Generate a random value to use as a WEBUI_SECRET_KEY in case the user didn't provide one.
-    echo $(head -c 12 /dev/random | base64) > "$KEY_FILE"
-  fi
+    if ! [ -e "$KEY_FILE" ]; then
+        echo "Generating WEBUI_SECRET_KEY"
+        # Generate a random value to use as a WEBUI_SECRET_KEY in case the user didn't provide one.
+        echo $(head -c 12 /dev/random | base64) > "$KEY_FILE"
+    fi
 
-  echo "Loading WEBUI_SECRET_KEY from $KEY_FILE"
-  WEBUI_SECRET_KEY=$(cat "$KEY_FILE")
+    echo "Loading WEBUI_SECRET_KEY from $KEY_FILE"
+    WEBUI_SECRET_KEY=$(cat "$KEY_FILE")
 fi
 
 if [[ "${USE_OLLAMA_DOCKER,,}" == "true" ]]; then
@@ -130,8 +136,8 @@ if [[ "${USE_OLLAMA_DOCKER,,}" == "true" ]]; then
 fi
 
 if [[ "${USE_CUDA_DOCKER,,}" == "true" ]]; then
-  echo "CUDA is enabled, appending LD_LIBRARY_PATH to include torch/cudnn & cublas libraries."
-  export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib/python3.11/site-packages/torch/lib:/usr/local/lib/python3.11/site-packages/nvidia/cudnn/lib"
+    echo "CUDA is enabled, appending LD_LIBRARY_PATH to include torch/cudnn & cublas libraries."
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib/python3.11/site-packages/torch/lib:/usr/local/lib/python3.11/site-packages/nvidia/cudnn/lib"
 fi
 
 # Check if SPACE_ID is set, if so, configure for space
@@ -161,4 +167,5 @@ fi
 
 PYTHON_CMD=$(command -v python3 || command -v python)
 
+echo "Starting Open WebUI server on $HOST:$PORT"
 WEBUI_SECRET_KEY="$WEBUI_SECRET_KEY" exec "$PYTHON_CMD" -m uvicorn open_webui.main:app --host "$HOST" --port "$PORT" --forwarded-allow-ips '*' --workers "${UVICORN_WORKERS:-1}"
