@@ -11,59 +11,70 @@ Program jest w stanie sam wykryć GPU NVIDIA/AMD/INTEL. W przypadku braku posiad
  - Automatyczne wykrywanie:
 
 	```bash
- 	./start.sh --build -d
+ 	./launch.sh --build -d
   	```
  - Wymuszenie trybu CPU:
 	
    	```bash
-    ./start.sh --cpu --build -d
+    ./launch.sh --cpu --build -d
 	```
 
  - Wymuszenie trybu NVIDIA:
 
 	```bash
- 	./start.sh --nvidia --build -d
+ 	./launch.sh --nvidia --build -d
  	```
  - Wymuszenie trybu AMD:
 
 	```bash
- 	./start.sh --amd --build -d
+ 	./launch.sh --amd --build -d
  	```
 
  - Wymuszenie trybu INTEL:
 
 	```bash
- 	./start.sh --intel --build -d
+ 	./launch.sh --intel --build -d
  	```
 2. Windows:
- - Automatyczne wykrywanie:
-   Należy uruchomić plik `start.bat`. Program automatycznie spawdzi, czy na komputerze jest zainstalowany i skonfigurowany WSL2. Jeśli nie, to wyświetli instrukcję, jak to zrobić. Następnie sprawdzi, czy jest zainstalowany `Docker Desktop`. Na samym końcu gdy będą te dwa kroki już zrobione, to program uruchomi wewnątrz WSL2 skrypt `start.sh`.
- 
- - Wymuszenie trybu CPU:
+ - Automatyczne wykrywanie GPU (NVIDIA):
+   ```DOS
+   .\start.bat
+   ```
 
-	```DOS
-	.\start.bat --cpu --build -d
-	```
+ - Wymuszenie określonego trybu GPU:
+   ```DOS
+   .\start.bat --nvidia
+   .\start.bat --amd
+   .\start.bat --intel
+   .\start.bat --cpu
+   ```
 
- - Wymuszenie trybu NVIDIA:
+ - Tryb lokalny (bez Docker):
+   ```DOS
+   .\start.bat --local
+   ```
 
-	```DOS
-	.\start.bat --nvidia --build -d
-	```
+**Uwaga**: Na Windows `start.bat` teraz obsługuje automatyczne wykrywanie NVIDIA GPU oraz wymuszanie trybów GPU. Wymaga zainstalowanych sterowników i Docker Desktop z GPU support.
 
- - Wymuszenie trybu AMD:
+Pozostałą część systemu należy obsługiwać w oknie terminala z włączoną dystrybucją WSL2.
 
-	```DOS
-	.\start.bat --amd --build -d
-	```
+**Dla pełnej kontroli w WSL2 (opcjonalnie):**
+```bash
+# W WSL2 terminal (navigate to project directory):
+cd /mnt/<ścieżka do głównego folderu projektu>/backend
 
- - Wymuszenie trybu INTEL:
+# Automatyczne wykrywanie GPU:
+./launch.sh
 
-	```DOS
-	.\start.bat --intel --build -d
-	```
+# Wymuszenie określonego trybu:
+./launch.sh --nvidia
+./launch.sh --amd  
+./launch.sh --intel
+./launch.sh --cpu
 
-Pozostałą część systemu należy obsługiwać w oknie terminala z włączoną dystrybucją WSL2. 
+# Tryb lokalny (bez Docker):
+./launch.sh --local
+``` 
 ### Disclaimer
 Żeby wszystko poprawnie działało, należy poprawnie skonfigurować dystrybucję Linux w WSL2.
 
@@ -82,9 +93,17 @@ Wybrać można którykolwiek model spośród biblioteki ollama https://ollama.co
   - deepseek-r1:70b 43GB
 
 ## Wymagania
-- Docker i Docker Compose (na Windows trzeba skonfigurować Settings -> Resources -> WSL integration. W zakładce WSL należy się upewnić, że checkbox `Enable integration with my default WSL distro` jest zaznaczony, a także jest włączona dystrybucja linuxa poniżej (np. `ubuntu`)
-- Poprawnie skonfigurowany NVIDIA Container Toolkit (w przypadku GPU NVIDIA) - bez tego, program będzie się uruchamiał jedynie w trybie `CPU` lub w przypadku innych kart `GPU` w innym trybie.
-- Sterowniki `CUDA NVIDIA`/`AMDGPU ROCm AMD`
+- Docker i Docker Compose
+- **Na Windows**: 
+  - Docker Desktop z GPU support (dla NVIDIA: włącz "Use WSL 2 based engine" + "Enable GPU support")
+  - WSL2 integration (Settings -> Resources -> WSL integration)
+  - `Enable integration with my default WSL distro` zaznaczone
+- **Dla GPU support**:
+  - NVIDIA: NVIDIA Container Toolkit + CUDA drivers  
+  - AMD: ROCm drivers (eksperymentalne na Windows)
+  - Intel: Intel GPU drivers (eksperymentalne na Windows)
+  
+**Uwaga**: `start.bat` teraz obsługuje automatyczne wykrywanie NVIDIA GPU na Windows. Dla AMD/Intel może być potrzebne WSL2.
 
 
 ## Konfiguracja modeli
@@ -106,27 +125,73 @@ Aby pobrać nowe modele, należy zrestartować serwis komendą:
 	docker compose down
 	
 ### Uruchomienie
-Aby uruchomić serwis, należy w głównym folderze projektu wykonać komendę:
+Aby uruchomić serwis, należy użyć odpowiedniego skryptu:
 
-	
-	./start.sh -d --build
+**Linux/WSL2:**
+```bash
+# Podstawowe uruchomienie z automatycznym wykrywaniem GPU:
+./launch.sh
+
+# Uruchomienie z budowaniem kontenera od nowa:
+./launch.sh --build
+
+# Uruchomienie w trybie lokalnym (bez Docker):
+./launch.sh --local
+```
+
+**Windows (rozszerzone możliwości):**
+```dos
+# Automatyczne wykrywanie GPU:
+.\start.bat
+
+# Wymuszenie określonego trybu:
+.\start.bat --nvidia    # Wymusza NVIDIA GPU
+.\start.bat --amd       # Wymusza AMD GPU  
+.\start.bat --intel     # Wymusza Intel GPU
+.\start.bat --cpu       # Wymusza CPU
+
+# Tryb lokalny:
+.\start.bat --local
+```
+
+**Uwaga**: `ui_start.sh` jest używany wewnętrznie przez Docker i nie powinien być uruchamiany bezpośrednio przez użytkownika.
 
 
 Sprawdzenie czy `ollama` skończyła przygotowywać model/modele:
 
-	docker compose logs -f ollama-ai
+	docker compose logs -f ollama
 
 ## Troubleshooting
-W przypadku gdy linux nie będzie chciał uruchomić naszego programu, należy zweryfikować na czym polega błąd. Najczęstrzymi problemami jest błędnie skonfigurowany docker w przypadku WSL, brak uprawnień dla plików .sh
-	
-	chmod +x *.sh	
+W przypadku gdy linux nie będzie chciał uruchomić naszego programu, należy zweryfikować na czym polega błąd. Najczęstszymi problemami są:
+
+1. **Błędnie skonfigurowany Docker w przypadku WSL**
+2. **Brak uprawnień dla plików .sh**
+   
+   Rozwiązanie:
+   ```bash
+   chmod +x *.sh
+   ```
+   
+   Lub użyj skryptu naprawczego:
+   ```bash
+   ./fix-permissions.sh
+   ```
+
+3. **Problemy z plikiem .env**
+   - Upewnij się, że plik .env istnieje w katalogu głównym
+   - Sprawdź, czy nie zawiera błędnych znaków lub pustych linii
+   - Użyj pliku .env.example jako szablonu
+
+4. **Problemy z portami**
+   - Sprawdź, czy porty 8080 i 11434 nie są zajęte
+   - Zmień porty w pliku .env jeśli potrzeba	
  
 
 ### Testowanie
 
 1. Sprawdzenie listy pobranych modeli:
 
-		docker compose exec ollama-ai ollama list
+		docker compose exec ollama ollama list
 
 2. Po uruchomieniu i pobraniu modeli, można przetestować API za pomocą `curl`:
 

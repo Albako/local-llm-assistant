@@ -26,7 +26,7 @@ do
         PROMPT=$FOLLOW_UP_PROMPT
     fi
 
-    echo -n "Tura $i: Wysyłanie zapytania... "
+    echo -n "Tura $i: Wysylanie zapytania... "
 
     # Bezpieczne budowanie obiektu JSON za pomocą jq
     # Sprawdza, czy zmienna CONTEXT jest pusta. Jeśli tak, nie dodaje klucza "context".
@@ -52,7 +52,7 @@ do
 
     # Sprawdź, czy nie wystąpił błąd
     if [ "$CONTEXT" == "null" ]; then
-        echo "BŁĄD! Nie otrzymano kontekstu. Odpowiedź serwera:"
+        echo "BLAD! Nie otrzymano kontekstu. Odpowiedz serwera:"
         echo "$RESPONSE"
         exit 1
     fi
@@ -60,8 +60,8 @@ do
     # Przelicz czas z nanosekund na milisekundy dla czytelności
     DURATION_MS=$(echo "$DURATION_NS / 1000000" | bc)
 
-    echo "Otrzymano odpowiedź. Czas trwania: $DURATION_MS ms"
+    echo "Otrzymano odpowiedz. Czas trwania: $DURATION_MS ms"
 done
 
 echo "----------------------------------------------------"
-echo "Test zakończony pomyślnie."
+echo "Test zakonczony pomyslnie."

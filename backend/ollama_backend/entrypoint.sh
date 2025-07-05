@@ -7,14 +7,18 @@ pid=$!
 sleep 5
 
 # Pobieranie modeli zdefiniowanych w .env
-MODELS_TO_PULL=$(echo $OLLAMA_MODELS | sed 's/,/ /g')
-echo ">>> Rozpoczynam pobieranie modeli bazowych: $OLLAMA_MODELS"
-for model in $MODELS_TO_PULL
-do
-  echo "--- Sprawdzanie modelu: $model ---"
-  ollama pull $model
-done
-echo ">>> Zakończono sprawdzanie modeli bazowych."
+if [ -n "$OLLAMA_MODELS" ]; then
+    MODELS_TO_PULL=$(echo $OLLAMA_MODELS | sed 's/,/ /g')
+    echo ">>> Rozpoczynam pobieranie modeli bazowych: $OLLAMA_MODELS"
+    for model in $MODELS_TO_PULL
+    do
+      echo "--- Sprawdzanie modelu: $model ---"
+      ollama pull $model
+    done
+    echo ">>> Zakończono sprawdzanie modeli bazowych."
+else
+    echo ">>> Brak modeli do pobrania (OLLAMA_MODELS jest puste)."
+fi
 echo ""
 
 # Definicja naszego spersonalizowanego modelu
