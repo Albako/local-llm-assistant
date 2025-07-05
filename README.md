@@ -78,14 +78,12 @@ Użyj skryptu `start.bat`, który znajduje się w folderze `backend`. Uruchom go
     
 ## Wyłączanie Projektu
 
-#### Wyłączenie bez usuwania kontenerów
-Nie usuwa użytkowników i historii czatów
+#### Wyłączenie bez usuwania kontenerów (nie usuwa użytkowników i historii czatów)
     ```bash
     docker compose down
     ```
     
-#### Wyłączanie wraz z usunięciem kontenerów
-Usuwa użytkowników i historię czatów
+#### Wyłączanie wraz z usunięciem kontenerów (usuwa użytkowników i historię czatów)
     ```bash
     docker compose down -v
     ```
