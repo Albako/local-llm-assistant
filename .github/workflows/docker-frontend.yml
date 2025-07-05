@@ -23,7 +23,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build frontend Docker image
-      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/projekt-frontend:latest Dockerfile
+      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/projekt-frontend:latest .
 
     - name: Push frontend Docker image
       run: docker push ${{ secrets.DOCKER_USERNAME }}/projekt-frontend:latest
