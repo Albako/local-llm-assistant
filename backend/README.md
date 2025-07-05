@@ -61,7 +61,7 @@ Pozostałą część systemu należy obsługiwać w oknie terminala z włączon�
 **Dla pełnej kontroli w WSL2 (opcjonalnie):**
 ```bash
 # W WSL2 terminal (navigate to project directory):
-cd /mnt/c/Users/[TwojaNazwaUzytkownika]/Downloads/Projekt-openwebui-merge-with-main-backend/Projekt-openwebui-merge-with-main-backend/backend
+cd /mnt/<ścieżka do głównego folderu projektu>/backend
 
 # Automatyczne wykrywanie GPU:
 ./launch.sh
