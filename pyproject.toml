@@ -175,8 +175,9 @@ exclude = [
     ".webui_secret_key",
     "dev.sh",
     "requirements.txt",
-    "start.sh",
-    "start_windows.bat",
+    "ui_start.sh",
+    "launch.sh",
+    "start.bat",
     "webui.db",
     "chroma.sqlite3",
 ]

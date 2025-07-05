@@ -2031,18 +2031,17 @@
 >
 	{#if !loading}
 		<div in:fade={{ duration: 50 }} class="w-full h-full flex flex-col">
-			{#if $settings?.backgroundImageUrl ?? null}
-				<div
-					class="absolute {$showSidebar
-						? 'md:max-w-[calc(100%-260px)] md:translate-x-[260px]'
-						: ''} top-0 left-0 w-full h-full bg-cover bg-center bg-no-repeat"
-					style="background-image: url({$settings.backgroundImageUrl})  "
-				/>
+			<!-- HARDCODED BACKGROUND IMAGE - ALWAYS VISIBLE -->
+			<div
+				class="absolute {$showSidebar
+					? 'md:max-w-[calc(100%-260px)] md:translate-x-[260px]'
+					: ''} top-0 left-0 w-full h-full bg-cover bg-center bg-no-repeat"
+				style="background-image: url('/my-background.jpg')"
+			/>
 
-				<div
-					class="absolute top-0 left-0 w-full h-full bg-linear-to-t from-white to-white/85 dark:from-gray-900 dark:to-gray-900/90 z-0"
-				/>
-			{/if}
+			<div
+				class="absolute top-0 left-0 w-full h-full bg-linear-to-t from-white to-white/85 dark:from-gray-900 dark:to-gray-900/90 z-0"
+			/>
 
 			<PaneGroup direction="horizontal" class="w-full h-full">
 				<Pane defaultSize={50} class="h-full flex relative max-w-full flex-col">
@@ -2107,16 +2106,15 @@
 									bind:files
 									bind:prompt
 									bind:autoScroll
-									bind:selectedToolIds
-									bind:selectedFilterIds
-									bind:imageGenerationEnabled
-									bind:codeInterpreterEnabled
-									bind:webSearchEnabled
-									bind:atSelectedModel
-									toolServers={$toolServers}
-									transparentBackground={$settings?.backgroundImageUrl ?? false}
-									{stopResponse}
-									{createMessagePair}
+									bind:selectedToolIds								bind:selectedFilterIds
+								bind:imageGenerationEnabled
+								bind:codeInterpreterEnabled
+								bind:webSearchEnabled
+								bind:atSelectedModel
+								toolServers={$toolServers}
+								transparentBackground={true}
+								{stopResponse}
+								{createMessagePair}
 									onChange={(input) => {
 										if (!$temporaryChatEnabled) {
 											if (input.prompt !== null) {
@@ -2167,13 +2165,12 @@
 									bind:prompt
 									bind:autoScroll
 									bind:selectedToolIds
-									bind:selectedFilterIds
-									bind:imageGenerationEnabled
-									bind:codeInterpreterEnabled
-									bind:webSearchEnabled
-									bind:atSelectedModel
-									transparentBackground={$settings?.backgroundImageUrl ?? false}
-									toolServers={$toolServers}
+									bind:selectedFilterIds								bind:imageGenerationEnabled
+								bind:codeInterpreterEnabled
+								bind:webSearchEnabled
+								bind:atSelectedModel
+								transparentBackground={true}
+								toolServers={$toolServers}
 									{stopResponse}
 									{createMessagePair}
 									on:upload={async (e) => {

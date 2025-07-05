@@ -1,9 +1,24 @@
 #!/bin/bash
+set -e  # Exit on any error
+
+# Function to handle errors
+handle_error() {
+    local exit_code=$?
+    echo "❌ ERROR: Command failed with exit code $exit_code"
+    echo "❌ Setup incomplete. Please check the error above."
+    exit $exit_code
+}
+
+# Set error trap
+trap 'handle_error' ERR
 
 # Always resolve PROJECT_ROOT as the parent of the backend directory
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 cd "$SCRIPT_DIR" || exit 1
+
+echo "📁 Project root: $PROJECT_ROOT"
+echo "📁 Backend directory: $SCRIPT_DIR"
 
 # Ensure .env exists in the project root
 if [ ! -f "$PROJECT_ROOT/.env" ]; then
@@ -69,14 +84,53 @@ if [[ "$MODE" != "LOCAL" ]]; then
     echo "Uruchamianie serwisu w trybie: $MODE"
     echo "____________________________________________________"
 
-    # Always use the project root .env file for docker compose
-    if [[ "$1" == --* && "$1" != "--local" ]]; then
-        docker compose --env-file "$PROJECT_ROOT/.env" $COMPOSE_FILES up -d "${@:2}"
-    else
-        docker compose --env-file "$PROJECT_ROOT/.env" $COMPOSE_FILES up -d "$@"
+    # Check if Docker is running
+    echo "🔍 Checking Docker status..."
+    if ! docker info >/dev/null 2>&1; then
+        echo "❌ ERROR: Docker is not running!"
+        echo "Please start Docker Desktop and try again."
+        exit 1
+    fi
+    echo "✅ Docker is running"
+
+    # Check if docker compose is available
+    if ! command -v docker >/dev/null 2>&1; then
+        echo "❌ ERROR: Docker command not found!"
+        echo "Please install Docker and try again."
+        exit 1
     fi
 
-    echo "Containers started successfully. Access the application at:"
+    # Verify compose files exist
+    if [[ ! -f "$PROJECT_ROOT/docker-compose.yml" ]]; then
+        echo "❌ ERROR: docker-compose.yml not found in $PROJECT_ROOT"
+        exit 1
+    fi
+
+    # Run docker compose and check for errors
+    echo "🚀 Starting Docker containers..."
+    if [[ "$1" == --* && "$1" != "--local" ]]; then
+        if ! docker compose --env-file "$PROJECT_ROOT/.env" $COMPOSE_FILES up -d "${@:2}"; then
+            echo "❌ ERROR: Failed to start Docker containers"
+            echo "Check Docker logs for more details."
+            exit 1
+        fi
+    else
+        if ! docker compose --env-file "$PROJECT_ROOT/.env" $COMPOSE_FILES up -d "$@"; then
+            echo "❌ ERROR: Failed to start Docker containers"
+            echo "Check Docker logs for more details."
+            exit 1
+        fi
+    fi
+
+    # Verify containers are actually running
+    echo "🔍 Verifying containers are running..."
+    sleep 3
+    if ! docker compose --env-file "$PROJECT_ROOT/.env" $COMPOSE_FILES ps --services --filter "status=running" >/dev/null 2>&1; then
+        echo "❌ WARNING: Some containers may not be running properly"
+        echo "Check container status with: docker compose ps"
+    fi
+
+    echo "✅ Containers started successfully. Access the application at:"
     echo "  http://localhost:${OPEN_WEBUI_PORT:-3000}"
     echo ""
     echo "To view logs, run:"
@@ -94,18 +148,53 @@ echo "____________________________________________________"
 
 echo "Running in LOCAL DEVELOPMENT MODE"
 echo "This requires Python dependencies to be installed locally."
-echo "Make sure you have run: pip install -r requirements.txt"
+
+# Check if Python is available
+echo "🔍 Checking Python installation..."
+PYTHON_CMD=$(command -v python3 || command -v python || echo "")
+if [[ -z "$PYTHON_CMD" ]]; then
+    echo "❌ ERROR: Python not found!"
+    echo "Please install Python and try again."
+    exit 1
+fi
+echo "✅ Python found: $PYTHON_CMD"
+
+# Check if requirements.txt exists and dependencies are installed
+if [[ -f "requirements.txt" ]]; then
+    echo "🔍 Checking Python dependencies..."
+    if ! $PYTHON_CMD -c "import uvicorn, open_webui" >/dev/null 2>&1; then
+        echo "❌ ERROR: Required Python dependencies not installed!"
+        echo "Please run: pip install -r requirements.txt"
+        exit 1
+    fi
+    echo "✅ Python dependencies available"
+else
+    echo "⚠️  WARNING: requirements.txt not found"
+fi
+
 echo ""
 
 # Add conditional Playwright browser installation
 if [[ "${WEB_LOADER_ENGINE,,}" == "playwright" ]]; then
     if [[ -z "${PLAYWRIGHT_WS_URL}" ]]; then
-        echo "Installing Playwright browsers..."
-        playwright install chromium
-        playwright install-deps chromium
+        echo "🔍 Installing Playwright browsers..."
+        if ! playwright install chromium; then
+            echo "❌ ERROR: Failed to install Playwright browsers"
+            exit 1
+        fi
+        if ! playwright install-deps chromium; then
+            echo "❌ ERROR: Failed to install Playwright dependencies"
+            exit 1
+        fi
+        echo "✅ Playwright browsers installed"
     fi
 
-    python -c "import nltk; nltk.download('punkt_tab')"
+    echo "🔍 Downloading NLTK data..."
+    if ! python -c "import nltk; nltk.download('punkt_tab')"; then
+        echo "❌ ERROR: Failed to download NLTK data"
+        exit 1
+    fi
+    echo "✅ NLTK data downloaded"
 fi
 
 # Handle secret key for local development
@@ -142,22 +231,39 @@ fi
 
 # Check if SPACE_ID is set, if so, configure for space
 if [ -n "$SPACE_ID" ]; then
-    echo "Configuring for HuggingFace Space deployment"
+    echo "🔍 Configuring for HuggingFace Space deployment"
 
     if [ -n "$ADMIN_USER_EMAIL" ] && [ -n "$ADMIN_USER_PASSWORD" ]; then
         echo "Admin user configured, creating"
-        WEBUI_SECRET_KEY="$WEBUI_SECRET_KEY" uvicorn open_webui.main:app --host "$HOST" --port "$PORT" --forwarded-allow-ips '*' &
+        if ! WEBUI_SECRET_KEY="$WEBUI_SECRET_KEY" uvicorn open_webui.main:app --host "$HOST" --port "$PORT" --forwarded-allow-ips '*' &; then
+            echo "❌ ERROR: Failed to start webui for admin user creation"
+            exit 1
+        fi
         webui_pid=$!
+        
         echo "Waiting for webui to start..."
+        local retries=0
         while ! curl -s http://localhost:8080/health > /dev/null; do
             sleep 1
+            retries=$((retries + 1))
+            if [ $retries -gt 30 ]; then
+                echo "❌ ERROR: WebUI failed to start within 30 seconds"
+                kill $webui_pid 2>/dev/null
+                exit 1
+            fi
         done
+        
         echo "Creating admin user..."
-        curl \
+        if ! curl \
             -X POST "http://localhost:8080/api/v1/auths/signup" \
             -H "accept: application/json" \
             -H "Content-Type: application/json" \
-            -d "{ \"email\": \"${ADMIN_USER_EMAIL}\", \"password\": \"${ADMIN_USER_PASSWORD}\", \"name\": \"Admin\" }"
+            -d "{ \"email\": \"${ADMIN_USER_EMAIL}\", \"password\": \"${ADMIN_USER_PASSWORD}\", \"name\": \"Admin\" }"; then
+            echo "❌ ERROR: Failed to create admin user"
+            kill $webui_pid 2>/dev/null
+            exit 1
+        fi
+        
         echo "Shutting down webui..."
         kill $webui_pid
     fi
@@ -165,7 +271,23 @@ if [ -n "$SPACE_ID" ]; then
     export WEBUI_URL=${SPACE_HOST}
 fi
 
-PYTHON_CMD=$(command -v python3 || command -v python)
+echo "🚀 Starting Open WebUI server on $HOST:$PORT"
+echo "🔍 Final system check..."
 
-echo "Starting Open WebUI server on $HOST:$PORT"
-WEBUI_SECRET_KEY="$WEBUI_SECRET_KEY" exec "$PYTHON_CMD" -m uvicorn open_webui.main:app --host "$HOST" --port "$PORT" --forwarded-allow-ips '*' --workers "${UVICORN_WORKERS:-1}"
+# Final verification before starting
+if [[ -z "$WEBUI_SECRET_KEY" ]]; then
+    echo "❌ ERROR: WEBUI_SECRET_KEY not set"
+    exit 1
+fi
+
+if ! $PYTHON_CMD -c "import open_webui.main" >/dev/null 2>&1; then
+    echo "❌ ERROR: Cannot import open_webui.main module"
+    echo "Please check your Python installation and dependencies"
+    exit 1
+fi
+
+echo "✅ All checks passed. Starting server..."
+if ! WEBUI_SECRET_KEY="$WEBUI_SECRET_KEY" exec "$PYTHON_CMD" -m uvicorn open_webui.main:app --host "$HOST" --port "$PORT" --forwarded-allow-ips '*' --workers "${UVICORN_WORKERS:-1}"; then
+    echo "❌ ERROR: Failed to start Open WebUI server"
+    exit 1
+fi

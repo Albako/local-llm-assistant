@@ -960,8 +960,9 @@
 							}}
 						>
 							<div class=" self-center mr-3">
+								<!-- HARDCODED USER AVATAR - ALWAYS SHOWS DOGE.PNG -->
 								<img
-									src={$user?.profile_image_url}
+									src="/doge.png"
 									class=" max-w-[30px] object-cover rounded-full"
 									alt="User profile"
 								/>

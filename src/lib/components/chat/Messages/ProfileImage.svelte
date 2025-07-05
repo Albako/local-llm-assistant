@@ -5,16 +5,10 @@
 	export let src = `${WEBUI_BASE_URL}/static/favicon.png`;
 </script>
 
+<!-- HARDCODED USER AVATAR - ALWAYS SHOWS DOGE.PNG -->
 <img
 	crossorigin="anonymous"
-	src={src === ''
-		? `${WEBUI_BASE_URL}/static/favicon.png`
-		: src.startsWith(WEBUI_BASE_URL) ||
-			  src.startsWith('https://www.gravatar.com/avatar/') ||
-			  src.startsWith('data:') ||
-			  src.startsWith('/')
-			? src
-			: `/user.png`}
+	src="/doge.png"
 	class=" {className} object-cover rounded-full"
 	alt="profile"
 	draggable="false"

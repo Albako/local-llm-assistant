@@ -34,6 +34,22 @@ html {
 	word-break: break-word;
 }
 
+/* HARDCODED BACKGROUND IMAGE - ALWAYS VISIBLE */
+body {
+	background-image: url('/my-background.jpg') !important;
+	background-size: cover !important;
+	background-position: center !important;
+	background-repeat: no-repeat !important;
+	background-attachment: fixed !important;
+}
+
+#chat-container {
+	background-image: url('/my-background.jpg') !important;
+	background-size: cover !important;
+	background-position: center !important;
+	background-repeat: no-repeat !important;
+}
+
 code {
 	/* white-space-collapse: preserve !important; */
 	overflow-x: auto;

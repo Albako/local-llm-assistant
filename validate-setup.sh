@@ -93,7 +93,8 @@ fi
 echo
 echo "Checking required files..."
 REQUIRED_FILES=(
-    "backend/start.sh"
+    "backend/ui_start.sh"
+    "backend/launch.sh"
     "backend/start.bat"
     "backend/requirements.txt"
     "backend/ollama_backend/Dockerfile"
@@ -119,6 +120,13 @@ else
     echo "✅ Port 8080 is available"
 fi
 
+echo "Checking if ports are available..."
+if ss -tuln | grep -q ":3000"; then
+    echo "⚠️  Warning: Port 3000 is already in use"
+else
+    echo "✅ Port 3000 is available"
+fi
+
 if ss -tuln | grep -q ":11434"; then
     echo "⚠️  Warning: Port 11434 is already in use"
 else
@@ -131,6 +139,6 @@ echo "Validation Complete"
 echo "========================================="
 echo
 echo "If all checks passed, you can run:"
-echo "  ./backend/start.sh         # Linux/WSL"
+echo "  ./backend/launch.sh        # Linux/WSL"
 echo "  ./backend/start.bat        # Windows"
 echo

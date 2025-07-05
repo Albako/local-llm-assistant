@@ -180,8 +180,9 @@
 							aria-label="User Menu"
 						>
 							<div class=" self-center">
+								<!-- HARDCODED USER AVATAR - ALWAYS SHOWS DOGE.PNG -->
 								<img
-									src={$user?.profile_image_url}
+									src="/doge.png"
 									class="size-6 object-cover rounded-full"
 									alt="User profile"
 									draggable="false"
