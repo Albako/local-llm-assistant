@@ -86,6 +86,10 @@ Użyj skryptu `start.bat`, który znajduje się w folderze `backend`. Uruchom go
 #### Wyłączanie wraz z usunięciem kontenerów (usuwa użytkowników i historię czatów)
     
     docker compose down -v
+
+#### Zatrzymanie pracy calego projektu, bez konieczności pobierania modeli od nowa przy ponownym uruchomieniu
+
+    docker compose stop
     
     
 
