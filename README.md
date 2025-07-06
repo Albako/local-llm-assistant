@@ -109,5 +109,5 @@ W projekcie znajdują się dodatkowe skrypty pomocnicze:
 
 1.  **Błąd `permission denied` przy uruchamianiu `.sh`:** Uruchom skrypt `./fix-permissions.sh`.
 2.  **Błąd `address already in use`:** Oznacza, że port `3000` lub `11434` jest zajęty. Sprawdź, czy nie masz uruchomionej innej instancji projektu lub natywnej aplikacji Ollama.
-3.  **Problem z GPU na Fedorze:** Jeśli `docker-compose` nie widzi GPU, użyj flagi `--docker-run` w skrypcie `launch.sh`, aby użyć obejścia opartego na `docker run`. Przykład: `./backend/launch.sh --nvidia --docker-run -d`.
+3.  **Problem z GPU:** Jeśli `docker-compose` nie widzi GPU, użyj flagi `--docker-run` w skrypcie `launch.sh`, aby użyć obejścia opartego na `docker run`. Przykład: `./backend/launch.sh --nvidia --docker-run -d`.
 
