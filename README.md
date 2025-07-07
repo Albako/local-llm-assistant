@@ -111,3 +111,10 @@ W projekcie znajdują się dodatkowe skrypty pomocnicze:
 2.  **Błąd `address already in use`:** Oznacza, że port `3000` lub `11434` jest zajęty. Sprawdź, czy nie masz uruchomionej innej instancji projektu lub natywnej aplikacji Ollama.
 3.  **Problem z GPU:** Jeśli `docker-compose` nie widzi GPU, użyj flagi `--docker-run` w skrypcie `launch.sh`, aby użyć obejścia opartego na `docker run`. Przykład: `./backend/launch.sh --nvidia --docker-run -d`.
 
+## Wymagania systemowe
+
+#### Minimalne
+- OS: Linux typu Mint XFCE Edition
+- CPU: Jakikolwiek z obsługą instrukcji AVX2
+- RAM: 8GB (testy wykazały, że jest mozliwe odpalenie calego projektu na 4GB, jednakże wtedy jest jedynie możliwy do użycia mały model mniejszy lub równy 1b przy wspieranym GPU)
+- GPU: Nie jest wymagane, jednakże wystarczy jakiekolwiek, które wspiera sterowniki Nvidia CUDA/AMD ROCm najlepiej z 2GB VRAM lub więcej
