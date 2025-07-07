@@ -118,3 +118,9 @@ W projekcie znajdują się dodatkowe skrypty pomocnicze:
 - CPU: Jakikolwiek z obsługą instrukcji AVX2
 - RAM: 8GB (testy wykazały, że jest mozliwe odpalenie calego projektu na 4GB, jednakże wtedy jest jedynie możliwy do użycia mały model mniejszy lub równy 1b przy wspieranym GPU)
 - GPU: Nie jest wymagane, jednakże wystarczy jakiekolwiek, które wspiera sterowniki Nvidia CUDA/AMD ROCm najlepiej z 2GB VRAM lub więcej
+
+#### Rekomendowane
+- OS: Windows 10/11 lub nowszy z WSL2 / Linux (jakikolwiek na którym zadziałają wymagane sterowniki i programy)
+- CPU: x86 z obsługą instrukcji AVX2. W trybie CPU im więcej rdzeni i im szybsze taktowanie tym lepiej.
+- RAM: 32GB DDR5
+- GPU: Im więcej VRAM tym lepiej, byle by wspierały NVIDIA CUDA/ AMD ROCm
