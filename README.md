@@ -38,7 +38,11 @@ Przed uruchomieniem upewnij się, że masz zainstalowane:
     ```bash
     ./fix-permissions.sh
     ```
-    *(Ta komenda wykonuje `chmod +x` na wszystkich plikach `.sh` w projekcie. By ręcznie to zrobić, należy wpisać w głównym folderze i w folderze backend komendę `chmod +x *.sh`).*
+    *(Ta komenda wykonuje `chmod +x` na wszystkich plikach `.sh` w projekcie. By skrypt zadziałał należy wpisać:
+    ```bash
+    chmod +x *.sh
+    ```
+    w głownym folderze programu).*
 
 ## Uruchomienie Projektu
 
