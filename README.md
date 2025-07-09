@@ -118,7 +118,7 @@ W projekcie znajdują się dodatkowe skrypty pomocnicze:
 ## Wymagania systemowe
 
 #### Minimalne
-- OS: Linux typu Mint XFCE Edition
+- OS: Linux Server lub lekka dystrybucja z GUI typu Mint XFCE
 - CPU: Jakikolwiek z obsługą instrukcji AVX2
 - RAM: 8GB (testy wykazały, że jest mozliwe odpalenie calego projektu na 4GB, jednakże wtedy jest jedynie możliwy do użycia mały model mniejszy lub równy 1b przy wspieranym GPU)
 - GPU: Nie jest wymagane, jednakże wystarczy jakiekolwiek, które wspiera sterowniki Nvidia CUDA/AMD ROCm najlepiej z 2GB VRAM lub więcej
