@@ -126,5 +126,5 @@ W projekcie znajdują się dodatkowe skrypty pomocnicze:
 #### Rekomendowane
 - OS: Windows 10/11 lub nowszy z WSL2 / Linux (jakikolwiek na którym zadziałają wymagane sterowniki i programy)
 - CPU: x86 z obsługą instrukcji AVX2. W trybie CPU im więcej rdzeni i im szybsze taktowanie tym lepiej.
-- RAM: 32GB DDR5
+- RAM: 32GB lub więcej. Im szybszy tym lepiej.
 - GPU: Im więcej VRAM tym lepiej, byle by wspierały NVIDIA CUDA/ AMD ROCm
