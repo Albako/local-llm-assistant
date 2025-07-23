@@ -20,8 +20,8 @@ Przed uruchomieniem upewnij się, że masz zainstalowane:
 ## Instalacja i Konfiguracja
 1.  **Sklonuj repozytorium:**
     ```bash
-    git clone https://github.com/Projektautomatyzacja/Projekt.git
-    cd Projekt
+    git clone https://github.com/Albako/local-llm-assistant.git
+    cd local-llm-assistant
     ```
 
 2.  **Skonfiguruj modele AI (plik `.env`)**
