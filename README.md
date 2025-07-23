@@ -42,14 +42,14 @@ Przed uruchomieniem upewnij się, że masz zainstalowane:
     ```bash
     chmod +x *.sh
     ```
-    w głownym folderze programu).*
+    w głownej ścieżce programu).*
 
 ## Uruchomienie Projektu
 
-Wszystkie komendy należy uruchamiać z **głównego folderu projektu (`Projekt/`)**.
+Wszystkie komendy należy uruchamiać z **głównej ścieżki projektu (`local-llm-assistant/`)**.
 
 #### Na Linuksie
-Użyj skryptu `launch.sh`, który znajduje się w folderze `backend`.
+Użyj skryptu `launch.sh`, który znajduje się w ścieżce `backend`.
 
 * **Automatyczne wykrywanie GPU:**
     ```bash
@@ -68,7 +68,7 @@ Użyj skryptu `launch.sh`, który znajduje się w folderze `backend`.
     ```
 
 #### Na Windows
-Użyj skryptu `start.bat`, który znajduje się w folderze `backend`. Uruchom go z terminala PowerShell lub cmd.
+Użyj skryptu `start.bat`, który znajduje się w ścieżce `backend`. Uruchom go z terminala PowerShell lub cmd.
 
 * **Automatyczne wykrywanie GPU:**
     ```dos
