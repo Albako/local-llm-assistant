@@ -29,7 +29,7 @@ Przed uruchomieniem upewnij się, że masz zainstalowane:
     
     *Przykład zawartości pliku `backend/.env`:*
     ```
-    OLLAMA_MODELS=llama3.2:3b,gemma:4b,deepseer-r1:7b,dolphincoder:7b
+    OLLAMA_MODELS=llama3.2:3b,gemma:4b,deepseek-r1:7b,dolphincoder:7b
     ```
     Listę dostępnych modeli znajdziesz na `https://ollama.com/library`.
 
