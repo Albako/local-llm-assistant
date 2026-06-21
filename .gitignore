@@ -307,3 +307,18 @@ dist
 cypress/videos
 cypress/screenshots
 .vscode/settings.json
+
+# Capacitor and Android artifacts
+/android
+/ios
+/www
+.capacitorrc.json
+node_modules/@capacitor/android
+node_modules/@capacitor/ios
+.gradle
+.idea
+*.iml
+*.apk
+*.aab
+local.properties
+
