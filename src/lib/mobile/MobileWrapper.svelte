@@ -6,13 +6,12 @@
 	let isOnline = navigator.onLine;
 	let unsubscribe: (() => void) | null = null;
 
-	onMount(() => {
+	onMount(async () => {
 		isMobile = isNativeMobile();
 
 		// Check initial network status
-		checkNetworkStatus().then((status) => {
-			isOnline = status.connected;
-		});
+		const status = await checkNetworkStatus();
+		isOnline = status.connected;
 
 		// Listen for network changes
 		unsubscribe = listenToNetworkChanges((connected) => {

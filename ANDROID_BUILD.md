@@ -56,7 +56,7 @@ This builds the SvelteKit application and generates static files in the `build/`
 
 ### 3. Initialize Android Project (First Time Only)
 ```bash
-npx cap add android
+npm run cap:init
 ```
 
 This creates the `android/` directory with the Android project structure.

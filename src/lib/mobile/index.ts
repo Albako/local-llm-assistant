@@ -61,11 +61,13 @@ export const checkNetworkStatus = async () => {
 export const listenToNetworkChanges = (callback: (connected: boolean) => void) => {
 	if (!isNativeMobile()) {
 		// Fallback to browser online/offline events
-		window.addEventListener('online', () => callback(true));
-		window.addEventListener('offline', () => callback(false));
+		const onlineHandler = () => callback(true);
+		const offlineHandler = () => callback(false);
+		window.addEventListener('online', onlineHandler);
+		window.addEventListener('offline', offlineHandler);
 		return () => {
-			window.removeEventListener('online', () => callback(true));
-			window.removeEventListener('offline', () => callback(false));
+			window.removeEventListener('online', onlineHandler);
+			window.removeEventListener('offline', offlineHandler);
 		};
 	}
 
@@ -89,15 +91,16 @@ export const setupAppLifecycle = (
 ) => {
 	if (!isNativeMobile()) {
 		// Fallback to visibility change events
-		document.addEventListener('visibilitychange', () => {
+		const visibilityChangeHandler = () => {
 			if (document.hidden) {
 				onPause?.();
 			} else {
 				onResume?.();
 			}
-		});
+		};
+		document.addEventListener('visibilitychange', visibilityChangeHandler);
 		return () => {
-			document.removeEventListener('visibilitychange', () => {});
+			document.removeEventListener('visibilitychange', visibilityChangeHandler);
 		};
 	}
 

@@ -16,7 +16,7 @@ npm run build
 
 ### 3. Initialize Android Project (First Time Only)
 ```bash
-npx cap add android
+npm run cap:init
 ```
 
 ### 4. Build and Deploy to Android
