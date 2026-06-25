@@ -309,7 +309,7 @@ cypress/screenshots
 .vscode/settings.json
 
 # Capacitor and Android artifacts
-/android
+# /android
 /ios
 /www
 .capacitorrc.json
