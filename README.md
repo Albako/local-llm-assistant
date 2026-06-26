@@ -101,6 +101,7 @@ Użyj skryptu `start.bat`, który znajduje się w ścieżce `backend`. Uruchom g
 
 * **Interfejs Graficzny (Open WebUI):** Otwórz przeglądarkę i wejdź na `http://localhost:3000`. Aby skorzystać na innym urządzeniu w sieci lokalnej, należy wejść na `http://<ip hosta>:3000`
 * **API serwera Ollama:** Jest dostępne pod adresem `http://localhost:11434` (do użytku programistycznego).
+* **Aplikacja mobilna (Android):**
 
 ## Dodatkowe Skrypty
 
