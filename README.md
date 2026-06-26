@@ -101,7 +101,7 @@ Użyj skryptu `start.bat`, który znajduje się w ścieżce `backend`. Uruchom g
 
 * **Interfejs Graficzny (Open WebUI):** Otwórz przeglądarkę i wejdź na `http://localhost:3000`. Aby skorzystać na innym urządzeniu w sieci lokalnej, należy wejść na `http://<ip hosta>:3000`
 * **API serwera Ollama:** Jest dostępne pod adresem `http://localhost:11434` (do użytku programistycznego).
-* **Aplikacja mobilna (Android):** Na komputerze z podpiętym telefonem z Android OS, należy uruchomić skrypt ```bash ./android/install_app.sh``` by zainstalować aplikację. Aplikacja działa dokładnie jak interfejs graficzny w przeglądarce.
+* **Aplikacja mobilna (Android):** Na komputerze z podpiętym telefonem z Android OS, należy uruchomić skrypt ```./android/install_app.sh``` by zainstalować aplikację. Aplikacja działa dokładnie jak interfejs graficzny w przeglądarce.
 
 ## Dodatkowe Skrypty
 
