@@ -1,12 +1,14 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-	appId: 'com.openwebui.app',
-	appName: 'Open WebUI',
-	webDir: 'build',
-	server: {
-		androidScheme: 'https'
-	},
+  	appId: 'com.openwebui.app',
+  	appName: 'Open WebUI',
+  	webDir: 'build',
+  	server: {
+    	androidScheme: 'https',
+    	url: 'http://TWÓJ_ADRES_IP:3000',
+    	cleartext: true
+  	},
 	plugins: {
 		StatusBar: {
 			style: 'dark',
