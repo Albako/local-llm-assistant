@@ -6,7 +6,7 @@ const config: CapacitorConfig = {
   	webDir: 'build',
   	server: {
     	androidScheme: 'https',
-    	url: 'http://TWÓJ_ADRES_IP:3000',
+    	url: 'http://<IP address of the server with backend>:3000',
     	cleartext: true
   	},
 	plugins: {
