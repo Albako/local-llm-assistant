@@ -105,7 +105,10 @@ Użyj skryptu `start.bat`, który znajduje się w ścieżce `backend`. Uruchom g
   ```bash
   ./android/install_app.sh
   ```
-  by zainstalować aplikację. Aplikacja działa dokładnie jak interfejs graficzny w przeglądarce.
+  by skompilować aplikację. Następnie można ją zainstalować na telefonie z włączoną opcją debugowania przez USB tym poleceniem:
+  ```bash
+  adb install android/app/build/outputs/apk/debug/app-debug.apk
+  ```
 
 ## Dodatkowe Skrypty
 
